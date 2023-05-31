@@ -3,8 +3,9 @@ const { RESULT_CODE_OK } = require("../utils/constant");
 let ServerConnect = require("../db/DBConnect");
 const fs = require("fs");
 const { stringify } = require("csv-stringify/sync");
-const { basename } = require("path");
 const { db_env, base_dir } = require("../utils/env_loader");
+const path = require("path");
+
 async function main(proc) {
   if (proc.args instanceof Array) {
     return await exec(...proc.args);
@@ -19,7 +20,7 @@ async function exec(table, out_dir) {
   try {
     let result = await connector.executeSelect(table);
     fs.writeFileSync(
-      base_dir() + "/" + (out_dir ? out_dir : "") + "/" + table + ".csv",
+      path.resolve(base_dir(), out_dir ? out_dir : "", table + ".csv"),
       stringify(result.rows, { header: true })
     );
   } finally {

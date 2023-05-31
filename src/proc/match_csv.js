@@ -2,7 +2,7 @@ const { check_type } = require("../utils/env_loader");
 const { RESULT_CODE_OK, RESULT_CODE_NG } = require("../utils/constant");
 
 const { import_csv, import_csv, append_data } = require("../utils/helper");
-
+const path = require("path");
 async function main(proc) {
   if (proc.args instanceof Array) {
     return await exec(...proc.args);

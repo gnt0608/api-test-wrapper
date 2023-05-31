@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 
 function db_env() {
   return {
@@ -26,10 +27,9 @@ function dd_env() {
 
 function base_dir() {
   if (process.env.config_base) {
-    return (
-      process.env.config_base +
-      "/" +
-      (process.env.base_dir ? process.env.base_dir : "")
+    return path.resolve(
+      process.env.config_base,
+      process.env.base_dir ? process.env.base_dir : ""
     );
   }
   return process.env.base_dir ? process.env.base_dir : "";

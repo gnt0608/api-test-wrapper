@@ -4,7 +4,7 @@ async function main(proc) {
   const dotenv = require("dotenv");
   const parsed = get_args(proc);
 
-  dotenv.populate(process.env, parsed);
+  dotenv.populate(process.env, parsed, { override: true });
   return RESULT_CODE_OK;
 }
 
