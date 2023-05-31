@@ -1,6 +1,0 @@
-export:
-  args:
-    base_dir: ./output/
-dump:
-  args:
-    table: functions

@@ -1,0 +1,10 @@
+dump:
+  args:
+    table: functions
+    out_path: ./output/
+
+match_csv:
+  args:
+    expect_path: expect/functions.csv
+    actual_path: output/functions.csv
+    out_path: match_result/functions.txt

@@ -10,17 +10,17 @@ async function main(proc) {
   if (proc.args instanceof Array) {
     return await exec(...proc.args);
   } else {
-    return await exec(proc.args["table"], proc.args["out_dir"]);
+    return await exec(proc.args["table"], proc.args["out_path"]);
   }
 }
 
-async function exec(table, out_dir) {
+async function exec(table, out_path) {
   let connector = await ServerConnect.connect(db_env());
   console.log("Start");
   try {
     let result = await connector.executeSelect(table);
     fs.writeFileSync(
-      path.resolve(base_dir(), out_dir ? out_dir : "", table + ".csv"),
+      path.resolve(base_dir(), out_path ? out_path : "", table + ".csv"),
       stringify(result.rows, { header: true })
     );
   } finally {
