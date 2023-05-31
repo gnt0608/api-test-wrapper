@@ -1,19 +1,48 @@
-let ServerConnect = require("../connector/Connect");
+const { RESULT_CODE_OK } = require("../utils/constant");
+
+let ServerConnect = require("../db/DBConnect");
 const fs = require("fs");
-const { stringify } = require('csv-stringify/sync');
+const { stringify } = require("csv-stringify/sync");
 const { basename } = require("path");
-const { db_env , base_dir} = require("../utils/env_loader");
-async function main(table,out_dir) {
-  // const table = args[0]
-  // const out_dir = args[1]
-  let connector = await ServerConnect.connect(db_env());
-  console.log("Start")
-  try {
-    let result = await connector.executeSelect(table);
-    fs.writeFileSync(base_dir() + "/" + out_dir + "/" + table + ".csv" ,stringify(result.rows,{header: true}));
-  } finally {
-    connector.destroy();
+const { db_env, base_dir } = require("../utils/env_loader");
+async function main(proc) {
+  if (proc.args instanceof Array) {
+    return await exec(...proc.args);
+  } else {
+    return await exec(proc.args["table"], proc.args["out_dir"]);
   }
 }
 
-module.exports.main = main
+async function exec(table, out_dir) {
+  let connector = await ServerConnect.connect(db_env());
+  console.log("Start");
+  try {
+    let result = await connector.executeSelect(table);
+    fs.writeFileSync(
+      base_dir() + "/" + (out_dir ? out_dir : "") + "/" + table + ".csv",
+      stringify(result.rows, { header: true })
+    );
+  } finally {
+    connector.destroy();
+  }
+  return RESULT_CODE_OK;
+}
+
+function set_returns(output, obj) {
+  if (output !== undefined) {
+    for (var ret_key in Object.keys(output)) {
+      if (get_value(obj, ret_key) !== undefined) var ret_name = output[ret_key];
+    }
+  }
+}
+
+function get_value(obj, key) {
+  for (var obj_key of Object.keys(obj)) {
+    if (obj_key.toUpperCase() == key.toUpperCase()) {
+      return obj[obj_key];
+    }
+  }
+  return undefined;
+}
+
+module.exports.main = main;
