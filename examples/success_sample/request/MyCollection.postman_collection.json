@@ -1,0 +1,31 @@
+{
+	"info": {
+		"_postman_id": "22972d21-6af0-4ef3-858e-cd4b3806c6f0",
+		"name": "MyCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27723740"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/hello",
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/hello",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"hello"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

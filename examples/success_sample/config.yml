@@ -1,3 +1,7 @@
+send_request:
+  args:
+    request_json: ./request/MyCollection.postman_collection.json
+
 dump:
   args:
     tables:

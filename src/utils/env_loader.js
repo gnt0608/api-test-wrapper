@@ -25,6 +25,12 @@ function dd_env() {
   };
 }
 
+function api_env() {
+  return {
+    api_type: process.env.api_type,
+  };
+}
+
 function base_dir() {
   if (process.env.config_base) {
     return path.resolve(
@@ -46,4 +52,4 @@ function check_type() {
   return check_type;
 }
 
-module.exports = { db_env, dd_env, log_env, base_dir, check_type };
+module.exports = { db_env, dd_env, log_env, api_env, base_dir, check_type };
