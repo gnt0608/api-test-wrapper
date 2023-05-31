@@ -1,6 +1,8 @@
 dump:
   args:
-    table: functions
+    tables:
+      - functions
+      - roles
     out_path: ./output/
 
 match_csv:

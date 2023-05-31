@@ -1,6 +1,6 @@
 dump:
   args:
-    table: functions
+    tables: functions
     out_path: ./output/
 
 match_csv:

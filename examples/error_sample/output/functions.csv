@@ -1,0 +1,23 @@
+function_id,function_type,function_name,uri,icon,navigate,request_method
+1000,FRONT,Home,/,mdi-home,1,GET
+1010,FRONT,Search Users,/users/search,mdi-magnify,1,GET
+1011,FRONT,Register User,/users/register,,,GET
+1012,FRONT,Edit User,/users/edit,,,GET
+1021,FRONT,Search Roles,/roles/search,mdi-magnify,1,GET
+1022,FRONT,Register Roles,/roles/register,,,GET
+1023,FRONT,Edit Roles,/roles/edit,,,GET
+2010,API,ReferUsers,/users,,,GET
+2011,API,ReferUser,/users,,,GET
+2012,API,RegisterUser,/users,,,POST
+2013,API,AlterUser,/users,,,PUT
+2014,API,DeleteUser,/users,,,DELETE
+2020,API,ReferRoles,/roles,,,GET
+2021,API,ReferRole,/roles,,,GET
+2022,API,RegisterRole,/roles,,,POST
+2023,API,AlterRole,/roles,,,PUT
+2024,API,DeleteRole,/roles,,,DELETE
+2030,API,ReferFunctions,/functions,,,GET
+2031,API,ReferFunction,/functions,,,GET
+2032,API,RegisterFunction,/functions,,,POST
+2033,API,AlterFunction,/functions,,,PUT
+2034,API,DeleteFunction,/functions,,,DELETE
