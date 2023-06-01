@@ -13,14 +13,13 @@ class DatadogConnect {
     };
   }
 
-  async get_log_by_query(query, from, to, cursor) {
-    if (!to) {
-      to = new Date().toISOString();
-    }
+  async get_log_by_query(application, query, from, to, cursor) {
+    //FIXME: application
+    // "service.application host:" + application
     var data = {
       filter: {
-        from: from,
-        to: to,
+        from: from.toISOString(),
+        to: to.toISOString(),
         query: query,
       },
       options: {
@@ -45,11 +44,6 @@ class DatadogConnect {
       "https://api.datadoghq.com/api/v2/logs/events/search",
       args
     );
-  }
-
-  async get_log(application, from, to, cursor) {
-    query = "service.application host:" + application;
-    return await this.getLogByQuery(query, from, to, cursor);
   }
 
   transform(data) {

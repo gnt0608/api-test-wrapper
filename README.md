@@ -1,1 +1,1 @@
-# api-test-wrapper
+# Continuous Testing wRapper for NodeJS

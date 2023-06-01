@@ -3,7 +3,7 @@ class Connect {
     const log_type = config.log_type;
 
     const LogConnect = require("./" + log_type + "Connect");
-    const connector = await LogConnect.connect(config);
+    const connector = new LogConnect(config);
 
     return connector;
   }
