@@ -11,7 +11,6 @@ class SendRequest extends Process {
   }
 
   private async _exec(request_json, out_path) {
-    console.log("Start");
     const connect = await APIConnect.connect(api_env());
     await connect.send_request(path.resolve(base_dir(), request_json));
     return RESULT_CODE_OK;

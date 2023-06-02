@@ -5,6 +5,10 @@ import * as fs from "fs";
 import { import_csv, append_data } from "utils/helper";
 import * as path from "path";
 import { Process } from "./Process";
+
+import { Logger } from "utils/Logger";
+var logger = new Logger();
+
 class MatchCSV extends Process {
   protected async exec(proc) {
     return await this._exec(
@@ -15,14 +19,18 @@ class MatchCSV extends Process {
     );
   }
 
-  private async _exec(expect_path, actual_path, out_path, check_type) {
-    console.log("Start");
+  private async _exec(
+    expect_path: string,
+    actual_path: string,
+    out_path: string,
+    check_type: string
+  ) {
     var stats = fs.statSync(path.resolve(base_dir(), expect_path));
     var match_result = RESULT_CODE_OK;
     if (stats.isDirectory()) {
       let in_files = fs.readdirSync(path.resolve(base_dir(), expect_path));
       for (let in_file of in_files) {
-        console.log(in_file);
+        logger.debug(in_file);
         let tablename = path.basename(in_file, ".csv");
 
         const expect_data = path.resolve(base_dir(), expect_path, in_file);
@@ -52,7 +60,12 @@ class MatchCSV extends Process {
     return match_result;
   }
 
-  private _match(expect_data, actual_data, out, check_type) {
+  private _match(
+    expect_data: string,
+    actual_data: string,
+    out: string,
+    check_type: string
+  ): number {
     var expect = import_csv(expect_data);
     var actual = import_csv(actual_data);
 
@@ -128,8 +141,12 @@ class MatchCSV extends Process {
     return returncode;
   }
 
-  private _match_data(expect_row, actual_data, matched_actual_index) {
-    for (const index in actual_data) {
+  private _match_data(
+    expect_row: [[key: string], any],
+    actual_data: Array<any>,
+    matched_actual_index: Array<number>
+  ): number {
+    for (let index = 0; index < actual_data.length; index++) {
       if (matched_actual_index.indexOf(index) > -1) {
         continue;
       }
@@ -158,7 +175,7 @@ class MatchCSV extends Process {
     return -1;
   }
 
-  private _cast(variable) {
+  private _cast(variable: any): any {
     const reg = new RegExp("(\\d{4})-(\\d{2})-(\\d{2})*");
     if (reg.test(variable)) {
       return new Date(variable).getTime();
@@ -166,7 +183,7 @@ class MatchCSV extends Process {
     return variable;
   }
 
-  private _get_actual_key(actual_keys, key) {
+  private _get_actual_key(actual_keys: Array<string>, key: string): string {
     for (var actual_key of actual_keys) {
       if (actual_key.toUpperCase() == key.toUpperCase()) {
         return actual_key;
@@ -175,11 +192,11 @@ class MatchCSV extends Process {
     return undefined;
   }
 
-  private _is_completely(check_type) {
+  private _is_completely(check_type: string): boolean {
     return check_type == "complete";
   }
 
-  private _is_contain(check_type) {
+  private _is_contain(check_type: string): boolean {
     return check_type == "contain";
   }
 }

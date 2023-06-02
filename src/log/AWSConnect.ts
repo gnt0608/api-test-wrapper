@@ -36,7 +36,6 @@ class AWSConnect extends LogConnect {
 
   public transform(data) {
     return data.events.map((s) => {
-      console.log(s);
       return {
         timestamp: new Date(s.timestamp).toISOString(),
         message: s.message.trim(),

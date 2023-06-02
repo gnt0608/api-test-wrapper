@@ -2,14 +2,20 @@ import { ProcessModel } from "model/ProcessModel";
 import { class_loader, load_yaml_file } from "utils/helper";
 import { RESULT_CODE_OK, RESULT_CODE_NG } from "utils/constant";
 import { setup, set_scenario_dir, set_variable } from "utils/env_loader";
-let clsf = process.argv[2];
+import { Logger } from "utils/Logger";
+var logger = new Logger();
 
-main(process.argv[3]).then(() => {
-  console.log("end");
-});
+let clsf = process.argv[2];
+main(process.argv[3])
+  .then(() => {
+    logger.info("end");
+  })
+  .catch((e) => {
+    logger.error(e.message);
+  });
 
 async function main(in_path: string) {
-  console.log("Start");
+  logger.info("Start");
 
   setup();
   set_scenario_dir(in_path);
@@ -18,9 +24,13 @@ async function main(in_path: string) {
 
   var returncode = RESULT_CODE_OK;
   for (const proc of procs) {
-    console.log("execute. [" + JSON.stringify(proc) + "]");
-    returncode = Math.max(returncode, await execute(proc));
-    console.log("done. [" + JSON.stringify(proc) + "]");
+    logger.info("execute. [" + JSON.stringify(proc) + "]");
+    const ret_val = await execute(proc);
+    returncode = Math.max(returncode, ret_val);
+    logger.info("done. [" + JSON.stringify(proc) + "]");
+    if (proc.stopOnError && ret_val == RESULT_CODE_NG) {
+      throw new Error("Result error. check results.");
+    }
   }
 
   if (returncode == RESULT_CODE_NG) {
@@ -37,12 +47,13 @@ function setup_procs(yaml_data) {
   var procs_list = [];
   for (const mod_name of Object.keys(yaml_data)) {
     const mod = yaml_data[mod_name];
-    const proc = new ProcessModel(
-      mod_name,
-      mod["process"],
-      mod["args"],
-      mod["returns"]
-    );
+    const proc = new ProcessModel({
+      proc_name: mod_name,
+      proc: mod["process"],
+      args: mod["args"],
+      output: mod["returns"],
+      stopOnError: mod["stopOnError"],
+    });
     procs_list.push(proc);
   }
   return procs_list;

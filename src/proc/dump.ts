@@ -6,7 +6,6 @@ import { stringify } from "csv-stringify/sync";
 import { db_env, base_dir } from "utils/env_loader";
 import * as path from "path";
 import { Process } from "./Process";
-
 class Dump extends Process {
   constructor() {
     super();
@@ -17,8 +16,9 @@ class Dump extends Process {
   }
 
   private async _exec(tables: string | Array<string>, out_path: string) {
-    let connector = await DBConnect.connect(db_env());
+    let connector;
     try {
+      connector = await DBConnect.connect(db_env());
       let table_list = tables instanceof Array ? tables : tables.split(",");
       for (const table of table_list) {
         let result = await connector.executeSelect(table);
@@ -28,7 +28,7 @@ class Dump extends Process {
         );
       }
     } finally {
-      connector.destroy();
+      if (connector) connector.destroy();
     }
     return RESULT_CODE_OK;
   }

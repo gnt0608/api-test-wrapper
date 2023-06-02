@@ -1,8 +1,8 @@
 import * as dotenv from "dotenv";
 import * as path from "path";
 import * as fs from "fs";
-dotenv.config();
-
+import { Logger } from "utils/Logger";
+var logger = new Logger();
 var variables: any;
 
 function setup() {
@@ -12,6 +12,7 @@ function setup() {
     .toString();
   JSON.parse(env_json);
   variables = Object.assign({ variable: {} }, JSON.parse(env_json));
+  logger.debug(variables);
 }
 
 function set_scenario_dir(scenario_path) {
@@ -20,6 +21,12 @@ function set_scenario_dir(scenario_path) {
 
 function set_variable(key, value) {
   variables.variable[key] = value;
+}
+
+function set_variables(values) {
+  for (let key of values) {
+    set_variable(key, values[key]);
+  }
 }
 
 function get_variable(key) {
@@ -78,6 +85,7 @@ export {
   setup,
   set_scenario_dir,
   set_variable,
+  set_variables,
   get_variable,
   db_env,
   dd_env,

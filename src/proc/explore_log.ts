@@ -19,7 +19,6 @@ class ExploreLog extends Process {
 
   private async _exec(application, from, to, query, out_path) {
     const env = log_env();
-    console.log("Start");
     try {
       const from_date = new Date(from);
       const to_date = to ? new Date(to) : new Date();

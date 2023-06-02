@@ -1,14 +1,12 @@
 import { Process } from "./Process";
-
+import { set_variables } from "utils/env_loader";
 import { RESULT_CODE_OK } from "utils/constant";
 
 class Export extends Process {
   protected async exec(proc) {
-    console.log("Start");
-    const dotenv = require("dotenv");
     const parsed = this._get_args(proc);
 
-    dotenv.populate(process.env, parsed, { override: true });
+    set_variables(parsed);
     return RESULT_CODE_OK;
   }
 

@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import { parse } from "csv-parse/sync";
+import * as yaml from "js-yaml";
 
 async function class_loader(class_path) {
   let module = await import(class_path);
@@ -35,8 +36,6 @@ function append_data(out_path, data) {
 }
 
 function load_yaml_file(filename) {
-  const fs = require("fs");
-  const yaml = require("js-yaml");
   const yamlText = fs.readFileSync(filename, "utf8");
   return yaml.load(yamlText);
 }

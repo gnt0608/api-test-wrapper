@@ -23,7 +23,6 @@ class NewmanConnect extends APIConnect {
           if (err) {
             throw err;
           }
-          console.log("collection run complete!");
           resolve(summary);
         }
       );

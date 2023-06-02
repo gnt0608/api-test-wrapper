@@ -1,5 +1,7 @@
 import { Client } from "pg";
 import { DBConnect } from "./DBConnect";
+import { Logger } from "utils/Logger";
+var logger = new Logger();
 class PostgresConnect extends DBConnect {
   client: Client;
 
@@ -12,13 +14,13 @@ class PostgresConnect extends DBConnect {
     const connector = new PostgresConnect(config);
 
     connector.client = new Client(config);
-    connector.client.connect();
+    await connector.client.connect();
     return connector;
   }
 
   public async executeSelect(tablename) {
     const sql = { text: "Select * from " + tablename };
-    console.log(sql.text);
+    logger.debug(sql.text);
     const result = await this.client.query(sql);
     return result;
   }
@@ -43,12 +45,12 @@ class PostgresConnect extends DBConnect {
       ")";
 
     const sql = { text: insert_sql, values: Object.values(object) };
-    console.log(sql.text);
+    logger.debug(sql.text);
     await this.client.query(sql);
   }
 
   public destroy() {
-    this.client.end();
+    if (this.client) this.client.end();
   }
 }
 
