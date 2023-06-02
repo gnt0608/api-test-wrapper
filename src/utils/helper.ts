@@ -1,5 +1,12 @@
-const fs = require("fs");
-const { parse } = require("csv-parse/sync");
+import * as fs from "fs";
+import { parse } from "csv-parse/sync";
+import * as yaml from "js-yaml";
+
+async function class_loader(class_path) {
+  let module = await import(class_path);
+  const clazz = module[Object.keys(module)[0]];
+  return clazz;
+}
 
 function import_csv(input_path) {
   const data = fs.readFileSync(input_path);
@@ -17,15 +24,20 @@ function import_csv(input_path) {
   });
 }
 
+function export_csv(out_path, data) {
+  // TODO:
+}
+
+function append_csv(pout_path, data) {
+  // TODO:
+}
 function append_data(out_path, data) {
   fs.appendFileSync(out_path, data + " \r\n");
 }
 
 function load_yaml_file(filename) {
-  const fs = require("fs");
-  const yaml = require("js-yaml");
   const yamlText = fs.readFileSync(filename, "utf8");
   return yaml.load(yamlText);
 }
 
-module.exports = { import_csv, append_data, load_yaml_file };
+export { class_loader, import_csv, append_csv, append_data, load_yaml_file };

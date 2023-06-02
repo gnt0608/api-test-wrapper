@@ -1,8 +1,12 @@
-const { Client } = require("pg");
+import { Client } from "pg";
+import { DBConnect } from "./DBConnect";
+import { Logger } from "utils/Logger";
+var logger = new Logger();
+class PostgresConnect extends DBConnect {
+  client: Client;
 
-class PostgresConnect {
   constructor(config) {
-    this.config = config;
+    super(config);
     this.client = null;
   }
 
@@ -10,18 +14,18 @@ class PostgresConnect {
     const connector = new PostgresConnect(config);
 
     connector.client = new Client(config);
-    connector.client.connect();
+    await connector.client.connect();
     return connector;
   }
 
-  async executeSelect(tablename) {
+  public async executeSelect(tablename) {
     const sql = { text: "Select * from " + tablename };
-    console.log(sql.text);
+    logger.debug(sql.text);
     const result = await this.client.query(sql);
     return result;
   }
 
-  async executeInsert(tablename, object) {
+  public async executeInsert(tablename, object) {
     let i = 1;
     let values = "";
     for (let key in Object.keys(object)) {
@@ -41,13 +45,13 @@ class PostgresConnect {
       ")";
 
     const sql = { text: insert_sql, values: Object.values(object) };
-    console.log(sql.text);
+    logger.debug(sql.text);
     await this.client.query(sql);
   }
 
-  destroy() {
-    this.client.end();
+  public destroy() {
+    if (this.client) this.client.end();
   }
 }
 
-module.exports = PostgresConnect;
+export { PostgresConnect };

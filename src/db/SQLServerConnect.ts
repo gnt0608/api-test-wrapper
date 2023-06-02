@@ -1,8 +1,11 @@
-const sql = require("mssql");
+import * as sql from "mssql";
+import { DBConnect } from "./DBConnect";
 
-class SQLServerConnect {
+class SQLServerConnect extends DBConnect {
+  con: any;
+
   constructor(config) {
-    this.config = config;
+    super(config);
     this.con = null;
   }
 
@@ -12,12 +15,12 @@ class SQLServerConnect {
     return connector;
   }
 
-  async executeSelect(tablename) {
+  public async executeSelect(tablename) {
     const result = await this.con.query("Select * from " + tablename);
     return result;
   }
 
-  async executeInsert(tablename, object) {
+  public async executeInsert(tablename, object) {
     let insert_sql =
       "insert into " +
       tablename +
@@ -34,9 +37,9 @@ class SQLServerConnect {
     await request.query(insert_sql);
   }
 
-  destroy() {
+  public destroy() {
     this.con.close();
   }
 }
 
-module.exports = SQLServerConnect;
+export { SQLServerConnect };

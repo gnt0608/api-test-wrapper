@@ -1,19 +1,21 @@
-var Client = require("node-rest-client").Client;
-const { dd_env } = require("../utils/env_loader");
-
-class DatadogConnect {
+import { dd_env } from "utils/env_loader";
+import { LogConnect } from "./LogConnect";
+class DatadogConnect extends LogConnect {
+  client: any;
+  headers: Object;
   constructor(config) {
-    this.config = Object.assign(config, dd_env());
+    super(Object.assign(config, dd_env()));
 
+    var Client = require("node-rest-client").Client;
     this.client = new Client();
     this.headers = {
       "Content-Type": "application/json",
-      "DD-API-KEY": config.dd_apikey,
-      "DD-APPLICATION-KEY": config.dd_applicationkey,
+      "DD-API-KEY": super.config["dd_apikey"],
+      "DD-APPLICATION-KEY": super.config["dd_applicationkey"],
     };
   }
 
-  async get_log_by_query(application, query, from, to, cursor) {
+  public async get_log_by_query(application, query, from, to, cursor) {
     //FIXME: application
     // "service.application host:" + application
     var data = {
@@ -23,7 +25,9 @@ class DatadogConnect {
         query: query,
       },
       options: {
-        timezone: this.config.timezone ? this.config.timezone : "UTC+09:00",
+        timezone: this.config["timezone"]
+          ? this.config["timezone"]
+          : "UTC+09:00",
       },
       page: {
         limit: 5000,
@@ -32,7 +36,7 @@ class DatadogConnect {
     };
 
     if (cursor) {
-      data.page.cursor = cursor;
+      data.page["cursor"] = cursor;
     }
 
     var args = {
@@ -40,18 +44,18 @@ class DatadogConnect {
       headers: this.headers,
     };
 
-    return await this.executePost(
+    return await this._executePost(
       "https://api.datadoghq.com/api/v2/logs/events/search",
       args
     );
   }
 
-  transform(data) {
-    const targetKeys = this.config.target_keys.split(",");
+  public transform(data) {
+    const targetKeys = this.config["target_keys"].split(",");
     return data.data.map((d) => {
       var log = {};
       var l = d.attributes;
-      for (const ley of targetKeys) {
+      for (const key of targetKeys) {
         if (key in l) {
           log[key] = l[key];
         }
@@ -63,7 +67,7 @@ class DatadogConnect {
     });
   }
 
-  get_next(data) {
+  public get_next(data) {
     if ("meta" in data) {
       if ("page" in data.meta) {
         return data.meta.page.after;
@@ -71,7 +75,7 @@ class DatadogConnect {
     }
   }
 
-  executePost(uri, args) {
+  private _executePost(uri, args) {
     return new Promise((resolve, reject) => {
       this.client.post(uri, args, function (data, response) {
         resolve(data);
@@ -80,4 +84,4 @@ class DatadogConnect {
   }
 }
 
-module.exports = DatadogConnect;
+export { DatadogConnect };

@@ -1,9 +1,11 @@
 dump:
+  process: dump
   args:
     tables: functions
     out_path: ./output/
 
 match_csv:
+  process: match_csv
   args:
     expect_path: expect/functions.csv
     actual_path: output/functions.csv
