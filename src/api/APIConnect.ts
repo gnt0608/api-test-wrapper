@@ -1,6 +1,6 @@
 import { class_loader } from "utils/helper";
 abstract class APIConnect {
-  config: Object;
+  config: any;
   constructor(config) {
     this.config = config;
   }

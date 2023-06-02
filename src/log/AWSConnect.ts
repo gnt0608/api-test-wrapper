@@ -5,11 +5,12 @@ class AWSConnect extends LogConnect {
   constructor(config) {
     super(Object.assign(config, aws_env()));
 
-    // FIXME: アクセスキー設定
-    // AWS.config.credentials = new AWS.SharedIniFileCredentials({
-    //   profile: "your-profile",
-    // });
-    AWS.config.update({ region: "ap-northeast-1" });
+    const credentials = new AWS.Credentials({
+      accessKeyId: super.config.access_key_id,
+      secretAccessKey: super.config.secret_access_key,
+    });
+    AWS.config.credentials = credentials;
+    AWS.config.update({ region: super.config.aws_region });
   }
 
   public async get_log_by_query(application, query, from, to, cursor) {
