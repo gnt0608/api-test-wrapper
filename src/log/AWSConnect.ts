@@ -12,7 +12,7 @@ class AWSConnect extends LogConnect {
     AWS.config.update({ region: "ap-northeast-1" });
   }
 
-  async get_log_by_query(application, query, from, to, cursor) {
+  public async get_log_by_query(application, query, from, to, cursor) {
     // 適当なパラメータ
     //       logStreamNames: ["log-stream-1", "log-stream-2"],
     let params = {
@@ -34,7 +34,7 @@ class AWSConnect extends LogConnect {
     });
   }
 
-  transform(data) {
+  public transform(data) {
     return data.events.map((s) => {
       console.log(s);
       return {
@@ -44,7 +44,7 @@ class AWSConnect extends LogConnect {
     });
   }
 
-  get_next(data) {
+  public get_next(data) {
     return data.nextToken;
   }
 }

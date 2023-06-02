@@ -16,14 +16,14 @@ class PostgresConnect extends DBConnect {
     return connector;
   }
 
-  async executeSelect(tablename) {
+  public async executeSelect(tablename) {
     const sql = { text: "Select * from " + tablename };
     console.log(sql.text);
     const result = await this.client.query(sql);
     return result;
   }
 
-  async executeInsert(tablename, object) {
+  public async executeInsert(tablename, object) {
     let i = 1;
     let values = "";
     for (let key in Object.keys(object)) {
@@ -47,7 +47,7 @@ class PostgresConnect extends DBConnect {
     await this.client.query(sql);
   }
 
-  destroy() {
+  public destroy() {
     this.client.end();
   }
 }

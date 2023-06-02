@@ -8,11 +8,11 @@ import { import_csv } from "utils/helper";
 import { Process } from "./Process";
 
 class Insert extends Process {
-  async exec(proc) {
+  protected async exec(proc) {
     return await this._exec(proc.args["in_dir"]);
   }
 
-  async _exec(in_dir) {
+  private async _exec(in_dir) {
     let connector = await DBConnect.connect(db_env());
     try {
       let in_files = fs.readdirSync(resolve(base_dir(), in_dir));

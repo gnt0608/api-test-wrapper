@@ -1,4 +1,4 @@
-import { check_type, base_dir } from "utils/env_loader";
+import { base_dir } from "utils/env_loader";
 import { RESULT_CODE_OK, RESULT_CODE_NG } from "utils/constant";
 import * as fs from "fs";
 
@@ -6,15 +6,16 @@ import { import_csv, append_data } from "utils/helper";
 import * as path from "path";
 import { Process } from "./Process";
 class MatchCSV extends Process {
-  async exec(proc) {
+  protected async exec(proc) {
     return await this._exec(
       proc.args["expect_path"],
       proc.args["actual_path"],
-      proc.args["out_path"]
+      proc.args["out_path"],
+      proc.args["check_type"]
     );
   }
 
-  async _exec(expect_path, actual_path, out_path) {
+  private async _exec(expect_path, actual_path, out_path, check_type) {
     console.log("Start");
     var stats = fs.statSync(path.resolve(base_dir(), expect_path));
     var match_result = RESULT_CODE_OK;
@@ -30,7 +31,12 @@ class MatchCSV extends Process {
         const out = stats_out.isDirectory()
           ? path.resolve(base_dir(), out_path, tablename + ".txt")
           : path.resolve(base_dir(), out_path);
-        const tmp_result = this._match(expect_data, actual_data, out);
+        const tmp_result = this._match(
+          expect_data,
+          actual_data,
+          out,
+          check_type
+        );
         match_result = Math.max(tmp_result, match_result);
       }
     } else {
@@ -41,13 +47,12 @@ class MatchCSV extends Process {
       const out = stats_out.isDirectory()
         ? path.resolve(base_dir(), out_path, tablename + ".txt")
         : path.resolve(base_dir(), out_path);
-      match_result = this._match(expect_data, actual_data, out);
+      match_result = this._match(expect_data, actual_data, out, check_type);
     }
     return match_result;
   }
 
-  _match(expect_data, actual_data, out) {
-    const type = check_type();
+  private _match(expect_data, actual_data, out, check_type) {
     var expect = import_csv(expect_data);
     var actual = import_csv(actual_data);
 
@@ -55,7 +60,7 @@ class MatchCSV extends Process {
       // 期待にデータが存在せず、実績が存在する場合はすべてエラーとして終了
       // 実績も存在しない場合は forがスキップされて終了になる
 
-      if (this._is_completely(type) && actual && actual.length > 0) {
+      if (this._is_completely(check_type) && actual && actual.length > 0) {
         for (var index in actual) {
           append_data(
             out,
@@ -107,7 +112,7 @@ class MatchCSV extends Process {
 
     for (var index in actual) {
       if (
-        this._is_completely(type) &&
+        this._is_completely(check_type) &&
         matched_actual_index.indexOf(index) < 0
       ) {
         append_data(
@@ -123,7 +128,7 @@ class MatchCSV extends Process {
     return returncode;
   }
 
-  _match_data(expect_row, actual_data, matched_actual_index) {
+  private _match_data(expect_row, actual_data, matched_actual_index) {
     for (const index in actual_data) {
       if (matched_actual_index.indexOf(index) > -1) {
         continue;
@@ -153,7 +158,7 @@ class MatchCSV extends Process {
     return -1;
   }
 
-  _cast(variable) {
+  private _cast(variable) {
     const reg = new RegExp("(\\d{4})-(\\d{2})-(\\d{2})*");
     if (reg.test(variable)) {
       return new Date(variable).getTime();
@@ -161,7 +166,7 @@ class MatchCSV extends Process {
     return variable;
   }
 
-  _get_actual_key(actual_keys, key) {
+  private _get_actual_key(actual_keys, key) {
     for (var actual_key of actual_keys) {
       if (actual_key.toUpperCase() == key.toUpperCase()) {
         return actual_key;
@@ -169,10 +174,12 @@ class MatchCSV extends Process {
     }
     return undefined;
   }
-  _is_completely(check_type) {
+
+  private _is_completely(check_type) {
     return check_type == "complete";
   }
-  _is_contain(check_type) {
+
+  private _is_contain(check_type) {
     return check_type == "contain";
   }
 }

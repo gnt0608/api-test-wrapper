@@ -15,12 +15,12 @@ class SQLServerConnect extends DBConnect {
     return connector;
   }
 
-  async executeSelect(tablename) {
+  public async executeSelect(tablename) {
     const result = await this.con.query("Select * from " + tablename);
     return result;
   }
 
-  async executeInsert(tablename, object) {
+  public async executeInsert(tablename, object) {
     let insert_sql =
       "insert into " +
       tablename +
@@ -37,7 +37,7 @@ class SQLServerConnect extends DBConnect {
     await request.query(insert_sql);
   }
 
-  destroy() {
+  public destroy() {
     this.con.close();
   }
 }

@@ -7,7 +7,7 @@ class NewmanConnect extends APIConnect {
     return connector;
   }
 
-  send_request(request_json, out_path) {
+  public send_request(request_json, out_path) {
     // call newman.run to pass `options` object and wait for callback
     return new Promise((resolve, reject) => {
       newman.run(
@@ -30,7 +30,7 @@ class NewmanConnect extends APIConnect {
     });
   }
 
-  get_failure_count(summary) {
+  public get_failure_count(summary) {
     return summary.run.failures ? summary.run.failures.length : 0;
   }
 }

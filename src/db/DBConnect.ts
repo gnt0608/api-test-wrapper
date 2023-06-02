@@ -17,6 +17,7 @@ abstract class DBConnect {
 
   abstract executeSelect(tablename);
   abstract executeInsert(tablename, object);
+  abstract destroy();
 }
 
 export { DBConnect };

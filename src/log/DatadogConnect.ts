@@ -15,7 +15,7 @@ class DatadogConnect extends LogConnect {
     };
   }
 
-  async get_log_by_query(application, query, from, to, cursor) {
+  public async get_log_by_query(application, query, from, to, cursor) {
     //FIXME: application
     // "service.application host:" + application
     var data = {
@@ -44,13 +44,13 @@ class DatadogConnect extends LogConnect {
       headers: this.headers,
     };
 
-    return await this.executePost(
+    return await this._executePost(
       "https://api.datadoghq.com/api/v2/logs/events/search",
       args
     );
   }
 
-  transform(data) {
+  public transform(data) {
     const targetKeys = this.config["target_keys"].split(",");
     return data.data.map((d) => {
       var log = {};
@@ -67,7 +67,7 @@ class DatadogConnect extends LogConnect {
     });
   }
 
-  get_next(data) {
+  public get_next(data) {
     if ("meta" in data) {
       if ("page" in data.meta) {
         return data.meta.page.after;
@@ -75,7 +75,7 @@ class DatadogConnect extends LogConnect {
     }
   }
 
-  executePost(uri, args) {
+  private _executePost(uri, args) {
     return new Promise((resolve, reject) => {
       this.client.post(uri, args, function (data, response) {
         resolve(data);

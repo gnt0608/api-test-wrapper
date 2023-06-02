@@ -12,11 +12,11 @@ class Dump extends Process {
     super();
   }
 
-  async exec(proc) {
+  protected async exec(proc) {
     return await this._exec(proc.args["tables"], proc.args["out_path"]);
   }
 
-  async _exec(tables: string | Array<string>, out_path: string) {
+  private async _exec(tables: string | Array<string>, out_path: string) {
     let connector = await DBConnect.connect(db_env());
     try {
       let table_list = tables instanceof Array ? tables : tables.split(",");

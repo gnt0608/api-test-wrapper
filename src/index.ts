@@ -1,27 +1,25 @@
 import { ProcessModel } from "model/ProcessModel";
 import { class_loader, load_yaml_file } from "utils/helper";
 import { RESULT_CODE_OK, RESULT_CODE_NG } from "utils/constant";
-
-const path = require("path");
-const dotenv = require("dotenv");
-
+import { setup, set_scenario_dir, set_variable } from "utils/env_loader";
 let clsf = process.argv[2];
 
 main(process.argv[3]).then(() => {
   console.log("end");
 });
 
-async function main(in_path) {
+async function main(in_path: string) {
   console.log("Start");
 
-  dotenv.populate(process.env, { config_base: path.dirname(in_path) });
+  setup();
+  set_scenario_dir(in_path);
+  set_variable("start_time", new Date());
   const procs = setup_procs(load_yaml_file(in_path));
 
   var returncode = RESULT_CODE_OK;
   for (const proc of procs) {
     console.log("execute. [" + JSON.stringify(proc) + "]");
-    const ret = await execute(proc);
-    returncode = Math.max(returncode);
+    returncode = Math.max(returncode, await execute(proc));
     console.log("done. [" + JSON.stringify(proc) + "]");
   }
 
@@ -30,7 +28,7 @@ async function main(in_path) {
   }
 }
 
-async function execute(proc) {
+async function execute(proc: ProcessModel) {
   let clazz = await class_loader("proc/" + proc.proc);
   return await new clazz().main(proc);
 }

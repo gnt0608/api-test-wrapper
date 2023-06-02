@@ -16,6 +16,8 @@ abstract class LogConnect {
   }
 
   abstract get_log_by_query(application, query, from, to, cursor);
+  abstract transform(data);
+  abstract get_next(data);
 }
 
 export { LogConnect };

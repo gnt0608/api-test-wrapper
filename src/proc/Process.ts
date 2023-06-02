@@ -9,10 +9,10 @@ abstract class Process {
     return result_code;
   }
 
-  preproc(proc) {}
-  abstract exec(proc);
+  protected preproc(proc) {}
+  protected abstract exec(proc);
 
-  postproc(proc) {}
+  protected postproc(proc) {}
 }
 
 export { Process };

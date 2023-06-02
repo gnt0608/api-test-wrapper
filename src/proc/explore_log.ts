@@ -7,7 +7,7 @@ import * as path from "path";
 import { Process } from "./Process";
 
 class ExploreLog extends Process {
-  async exec(proc) {
+  protected async exec(proc) {
     return await this._exec(
       proc.args["application"],
       proc.args["from"],
@@ -17,7 +17,7 @@ class ExploreLog extends Process {
     );
   }
 
-  async _exec(application, from, to, query, out_path) {
+  private async _exec(application, from, to, query, out_path) {
     const env = log_env();
     console.log("Start");
     try {

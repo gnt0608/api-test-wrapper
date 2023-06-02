@@ -15,6 +15,7 @@ abstract class APIConnect {
   }
 
   abstract send_request(request_json, out_path);
+  abstract get_failure_count(result);
 }
 
 export { APIConnect };
