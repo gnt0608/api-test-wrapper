@@ -1,10 +1,10 @@
-import { RESULT_CODE_OK } from "../utils/constant";
+import { RESULT_CODE_OK } from "utils/constant";
 import * as fs from "fs";
 
-import { DBConnect } from "../db/DBConnect";
+import { DBConnect } from "db/DBConnect";
 import { basename, resolve } from "path";
-import { db_env, base_dir } from "../utils/env_loader";
-import { import_csv } from "../utils/helper";
+import { db_env, base_dir } from "utils/env_loader";
+import { import_csv } from "utils/helper";
 import { Process } from "./Process";
 
 class Insert extends Process {

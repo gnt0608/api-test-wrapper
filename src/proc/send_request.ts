@@ -1,8 +1,8 @@
-import { RESULT_CODE_OK } from "../utils/constant";
+import { RESULT_CODE_OK } from "utils/constant";
 import { Process } from "./Process";
 
-import { APIConnect } from "../api/APIConnect";
-import { api_env, base_dir } from "../utils/env_loader";
+import { APIConnect } from "api/APIConnect";
+import { api_env, base_dir } from "utils/env_loader";
 import * as path from "path";
 
 class SendRequest extends Process {

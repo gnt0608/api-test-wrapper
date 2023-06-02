@@ -1,4 +1,4 @@
-import { class_loader } from "../utils/helper";
+import { class_loader } from "utils/helper";
 abstract class DBConnect {
   config: Object;
 
@@ -9,7 +9,7 @@ abstract class DBConnect {
   static async connect(config) {
     const db_type = config.database_type;
 
-    let clazz = await class_loader("../db/" + db_type + "Connect");
+    let clazz = await class_loader("db/" + db_type + "Connect");
     const connector = await clazz.connect(config);
 
     return connector;

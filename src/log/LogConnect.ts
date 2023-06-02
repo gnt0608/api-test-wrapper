@@ -1,4 +1,4 @@
-import { class_loader } from "../utils/helper";
+import { class_loader } from "utils/helper";
 abstract class LogConnect {
   config: Object;
 
@@ -9,7 +9,7 @@ abstract class LogConnect {
   static async connect(config) {
     const log_type = config.log_type;
 
-    let clazz = await class_loader("../log/" + log_type + "Connect");
+    let clazz = await class_loader("log/" + log_type + "Connect");
     const connector = new clazz(config);
 
     return connector;

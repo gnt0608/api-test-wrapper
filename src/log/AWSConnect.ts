@@ -1,5 +1,5 @@
 import * as AWS from "aws-sdk";
-import { aws_env } from "../utils/env_loader";
+import { aws_env } from "utils/env_loader";
 import { LogConnect } from "./LogConnect";
 class AWSConnect extends LogConnect {
   constructor(config) {

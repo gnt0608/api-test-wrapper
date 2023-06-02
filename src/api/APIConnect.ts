@@ -1,4 +1,4 @@
-import { class_loader } from "../utils/helper";
+import { class_loader } from "utils/helper";
 abstract class APIConnect {
   config: Object;
   constructor(config) {
@@ -8,7 +8,7 @@ abstract class APIConnect {
   static async connect(config) {
     const api_type = config.api_type;
 
-    let clazz = await class_loader("../api/" + api_type + "Connect");
+    let clazz = await class_loader("api/" + api_type + "Connect");
     const connector = await clazz.connect(config);
 
     return connector;

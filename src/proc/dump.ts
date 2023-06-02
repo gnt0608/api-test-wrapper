@@ -1,9 +1,9 @@
-import { RESULT_CODE_OK } from "../utils/constant";
+import { RESULT_CODE_OK } from "utils/constant";
 
-import { DBConnect } from "../db/DBConnect";
+import { DBConnect } from "db/DBConnect";
 import * as fs from "fs";
 import { stringify } from "csv-stringify/sync";
-import { db_env, base_dir } from "../utils/env_loader";
+import { db_env, base_dir } from "utils/env_loader";
 import * as path from "path";
 import { Process } from "./Process";
 

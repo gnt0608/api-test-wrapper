@@ -1,6 +1,6 @@
 import { Process } from "./Process";
 
-import { RESULT_CODE_OK } from "../utils/constant";
+import { RESULT_CODE_OK } from "utils/constant";
 
 class Export extends Process {
   async exec(proc) {

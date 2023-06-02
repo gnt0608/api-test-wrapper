@@ -1,6 +1,6 @@
-import { ProcessModel } from "./model/ProcessModel";
-import { class_loader, load_yaml_file } from "./utils/helper";
-import { RESULT_CODE_OK, RESULT_CODE_NG } from "./utils/constant";
+import { ProcessModel } from "model/ProcessModel";
+import { class_loader, load_yaml_file } from "utils/helper";
+import { RESULT_CODE_OK, RESULT_CODE_NG } from "utils/constant";
 
 const path = require("path");
 const dotenv = require("dotenv");
@@ -31,8 +31,7 @@ async function main(in_path) {
 }
 
 async function execute(proc) {
-  // FIXME: パスがhelperからの相対パスになる
-  let clazz = await class_loader("../proc/" + proc.proc);
+  let clazz = await class_loader("proc/" + proc.proc);
   return await new clazz().main(proc);
 }
 

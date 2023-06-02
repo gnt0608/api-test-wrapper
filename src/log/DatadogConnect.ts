@@ -1,4 +1,4 @@
-import { dd_env } from "../utils/env_loader";
+import { dd_env } from "utils/env_loader";
 import { LogConnect } from "./LogConnect";
 class DatadogConnect extends LogConnect {
   client: any;

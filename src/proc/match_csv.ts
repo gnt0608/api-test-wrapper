@@ -1,8 +1,8 @@
-import { check_type, base_dir } from "../utils/env_loader";
-import { RESULT_CODE_OK, RESULT_CODE_NG } from "../utils/constant";
+import { check_type, base_dir } from "utils/env_loader";
+import { RESULT_CODE_OK, RESULT_CODE_NG } from "utils/constant";
 import * as fs from "fs";
 
-import { import_csv, append_data } from "../utils/helper";
+import { import_csv, append_data } from "utils/helper";
 import * as path from "path";
 import { Process } from "./Process";
 class MatchCSV extends Process {

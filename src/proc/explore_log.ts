@@ -1,8 +1,8 @@
-import { RESULT_CODE_OK } from "../utils/constant";
-import { LogConnect } from "../log/LogConnect";
+import { RESULT_CODE_OK } from "utils/constant";
+import { LogConnect } from "log/LogConnect";
 import * as fs from "fs";
-import { log_env, base_dir } from "../utils/env_loader";
-import { append_csv } from "../utils/helper";
+import { log_env, base_dir } from "utils/env_loader";
+import { append_csv } from "utils/helper";
 import * as path from "path";
 import { Process } from "./Process";
 
