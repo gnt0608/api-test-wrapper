@@ -41,7 +41,7 @@ class AWSConnect {
       console.log(s);
       return {
         timestamp: new Date(s.timestamp).toISOString(),
-        message: s.message,
+        message: s.message.trim(),
       };
     });
   }
