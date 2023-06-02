@@ -1,20 +1,24 @@
-const { RESULT_CODE_OK } = require("../utils/constant");
-async function main(proc) {
-  console.log("Start");
-  const dotenv = require("dotenv");
-  const parsed = get_args(proc);
+import { Process } from "./Process";
 
-  dotenv.populate(process.env, parsed, { override: true });
-  return RESULT_CODE_OK;
-}
+import { RESULT_CODE_OK } from "../utils/constant";
 
-function get_args(proc) {
-  const args = proc.args;
-  if (args instanceof Array) {
-    throw new Error("export args must be Object type.");
-  } else {
-    return args;
+class Export extends Process {
+  async exec(proc) {
+    console.log("Start");
+    const dotenv = require("dotenv");
+    const parsed = this._get_args(proc);
+
+    dotenv.populate(process.env, parsed, { override: true });
+    return RESULT_CODE_OK;
+  }
+
+  _get_args(proc) {
+    const args = proc.args;
+    if (args instanceof Array) {
+      throw new Error("export args must be Object type.");
+    } else {
+      return args;
+    }
   }
 }
-
-module.exports.main = main;
+export { Export };

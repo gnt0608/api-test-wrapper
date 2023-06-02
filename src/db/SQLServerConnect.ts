@@ -1,8 +1,11 @@
-const sql = require("mssql");
+import * as sql from "mssql";
+import { DBConnect } from "./DBConnect";
 
-class SQLServerConnect {
+class SQLServerConnect extends DBConnect {
+  con: any;
+
   constructor(config) {
-    this.config = config;
+    super(config);
     this.con = null;
   }
 
@@ -39,4 +42,4 @@ class SQLServerConnect {
   }
 }
 
-module.exports = SQLServerConnect;
+export { SQLServerConnect };

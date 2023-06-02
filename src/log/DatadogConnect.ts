@@ -1,15 +1,17 @@
-var Client = require("node-rest-client").Client;
-const { dd_env } = require("../utils/env_loader");
-
-class DatadogConnect {
+import { dd_env } from "../utils/env_loader";
+import { LogConnect } from "./LogConnect";
+class DatadogConnect extends LogConnect {
+  client: any;
+  headers: Object;
   constructor(config) {
-    this.config = Object.assign(config, dd_env());
+    super(Object.assign(config, dd_env()));
 
+    var Client = require("node-rest-client").Client;
     this.client = new Client();
     this.headers = {
       "Content-Type": "application/json",
-      "DD-API-KEY": config.dd_apikey,
-      "DD-APPLICATION-KEY": config.dd_applicationkey,
+      "DD-API-KEY": super.config["dd_apikey"],
+      "DD-APPLICATION-KEY": super.config["dd_applicationkey"],
     };
   }
 
@@ -23,7 +25,9 @@ class DatadogConnect {
         query: query,
       },
       options: {
-        timezone: this.config.timezone ? this.config.timezone : "UTC+09:00",
+        timezone: this.config["timezone"]
+          ? this.config["timezone"]
+          : "UTC+09:00",
       },
       page: {
         limit: 5000,
@@ -32,7 +36,7 @@ class DatadogConnect {
     };
 
     if (cursor) {
-      data.page.cursor = cursor;
+      data.page["cursor"] = cursor;
     }
 
     var args = {
@@ -47,11 +51,11 @@ class DatadogConnect {
   }
 
   transform(data) {
-    const targetKeys = this.config.target_keys.split(",");
+    const targetKeys = this.config["target_keys"].split(",");
     return data.data.map((d) => {
       var log = {};
       var l = d.attributes;
-      for (const ley of targetKeys) {
+      for (const key of targetKeys) {
         if (key in l) {
           log[key] = l[key];
         }
@@ -80,4 +84,4 @@ class DatadogConnect {
   }
 }
 
-module.exports = DatadogConnect;
+export { DatadogConnect };

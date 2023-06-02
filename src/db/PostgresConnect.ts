@@ -1,8 +1,10 @@
-const { Client } = require("pg");
+import { Client } from "pg";
+import { DBConnect } from "./DBConnect";
+class PostgresConnect extends DBConnect {
+  client: Client;
 
-class PostgresConnect {
   constructor(config) {
-    this.config = config;
+    super(config);
     this.client = null;
   }
 
@@ -50,4 +52,4 @@ class PostgresConnect {
   }
 }
 
-module.exports = PostgresConnect;
+export { PostgresConnect };

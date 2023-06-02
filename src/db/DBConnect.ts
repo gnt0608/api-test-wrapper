@@ -1,12 +1,22 @@
-class Connect {
+import { class_loader } from "../utils/helper";
+abstract class DBConnect {
+  config: Object;
+
+  constructor(config) {
+    this.config = config;
+  }
+
   static async connect(config) {
     const db_type = config.database_type;
 
-    const ServerConnect = require("./" + db_type + "Connect");
-    const connector = await ServerConnect.connect(config);
+    let clazz = await class_loader("../db/" + db_type + "Connect");
+    const connector = await clazz.connect(config);
 
     return connector;
   }
+
+  abstract executeSelect(tablename);
+  abstract executeInsert(tablename, object);
 }
 
-module.exports = Connect;
+export { DBConnect };

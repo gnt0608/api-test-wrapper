@@ -1,36 +1,34 @@
-const { RESULT_CODE_OK } = require("../utils/constant");
-const fs = require("fs");
+import { RESULT_CODE_OK } from "../utils/constant";
+import * as fs from "fs";
 
-let ServerConnect = require("./connector/Connect");
-const { basename, resolve } = require("path");
-const { db_env, base_dir } = require("../utils/env_loader");
-const { import_csv } = require("../utils/helper");
+import { DBConnect } from "../db/DBConnect";
+import { basename, resolve } from "path";
+import { db_env, base_dir } from "../utils/env_loader";
+import { import_csv } from "../utils/helper";
+import { Process } from "./Process";
 
-async function main(proc) {
-  if (proc.args instanceof Array) {
-    return await exec(...proc.args);
-  } else {
-    return await exec(proc.args["in_dir"]);
+class Insert extends Process {
+  async exec(proc) {
+    return await this._exec(proc.args["in_dir"]);
   }
-}
 
-async function exec(in_dir) {
-  let connector = await ServerConnect.connect(db_env());
-  try {
-    let in_files = fs.readdirSync(resolve(base_dir(), in_dir));
-    for (let in_file of in_files) {
-      let tablename = basename(in_file, ".csv");
-      console.log("file: " + in_file + ", table: " + tablename);
+  async _exec(in_dir) {
+    let connector = await DBConnect.connect(db_env());
+    try {
+      let in_files = fs.readdirSync(resolve(base_dir(), in_dir));
+      for (let in_file of in_files) {
+        let tablename = basename(in_file, ".csv");
+        console.log("file: " + in_file + ", table: " + tablename);
 
-      const records = import_csv(resolve(base_dir(), in_dir, in_file));
-      for (let record of records) {
-        await connector.executeInsert(tablename, record);
+        const records = import_csv(resolve(base_dir(), in_dir, in_file));
+        for (let record of records) {
+          await connector.executeInsert(tablename, record);
+        }
       }
+    } finally {
+      connector.destroy();
     }
-  } finally {
-    connector.destroy();
+    return RESULT_CODE_OK;
   }
-  return RESULT_CODE_OK;
 }
-
-module.exports.main = main;
+export { Insert };

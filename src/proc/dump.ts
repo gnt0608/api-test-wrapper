@@ -1,52 +1,37 @@
-const { RESULT_CODE_OK } = require("../utils/constant");
+import { RESULT_CODE_OK } from "../utils/constant";
 
-let ServerConnect = require("../db/DBConnect");
-const fs = require("fs");
-const { stringify } = require("csv-stringify/sync");
-const { db_env, base_dir } = require("../utils/env_loader");
-const path = require("path");
+import { DBConnect } from "../db/DBConnect";
+import * as fs from "fs";
+import { stringify } from "csv-stringify/sync";
+import { db_env, base_dir } from "../utils/env_loader";
+import * as path from "path";
+import { Process } from "./Process";
 
-async function main(proc) {
-  if (proc.args instanceof Array) {
-    return await exec(...proc.args);
-  } else {
-    return await exec(proc.args["tables"], proc.args["out_path"]);
+class Dump extends Process {
+  constructor() {
+    super();
   }
-}
 
-async function exec(tables, out_path) {
-  let connector = await ServerConnect.connect(db_env());
-  console.log("Start");
-  try {
-    let table_list = tables instanceof Array ? tables : tables.split(",");
-    for (const table of table_list) {
-      let result = await connector.executeSelect(table);
-      fs.writeFileSync(
-        path.resolve(base_dir(), out_path ? out_path : "", table + ".csv"),
-        stringify(result.rows, { header: true })
-      );
+  async exec(proc) {
+    return await this._exec(proc.args["tables"], proc.args["out_path"]);
+  }
+
+  async _exec(tables: string | Array<string>, out_path: string) {
+    let connector = await DBConnect.connect(db_env());
+    try {
+      let table_list = tables instanceof Array ? tables : tables.split(",");
+      for (const table of table_list) {
+        let result = await connector.executeSelect(table);
+        fs.writeFileSync(
+          path.resolve(base_dir(), out_path ? out_path : "", table + ".csv"),
+          stringify(result.rows, { header: true })
+        );
+      }
+    } finally {
+      connector.destroy();
     }
-  } finally {
-    connector.destroy();
-  }
-  return RESULT_CODE_OK;
-}
-
-function set_returns(output, obj) {
-  if (output !== undefined) {
-    for (var ret_key in Object.keys(output)) {
-      if (get_value(obj, ret_key) !== undefined) var ret_name = output[ret_key];
-    }
+    return RESULT_CODE_OK;
   }
 }
 
-function get_value(obj, key) {
-  for (var obj_key of Object.keys(obj)) {
-    if (obj_key.toUpperCase() == key.toUpperCase()) {
-      return obj[obj_key];
-    }
-  }
-  return undefined;
-}
-
-module.exports.main = main;
+export { Dump };

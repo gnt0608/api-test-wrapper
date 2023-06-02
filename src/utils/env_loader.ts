@@ -1,5 +1,5 @@
 require("dotenv").config();
-const path = require("path");
+import * as path from "path";
 
 function db_env() {
   return {
@@ -22,6 +22,12 @@ function dd_env() {
   return {
     dd_apikey: process.env.dd_apikey,
     dd_applicationkey: process.env.dd_applicationkey,
+  };
+}
+
+function aws_env() {
+  return {
+    aws_region: process.env.aws_region,
   };
 }
 
@@ -52,4 +58,4 @@ function check_type() {
   return check_type;
 }
 
-module.exports = { db_env, dd_env, log_env, api_env, base_dir, check_type };
+export { db_env, dd_env, aws_env, log_env, api_env, base_dir, check_type };

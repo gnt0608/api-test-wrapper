@@ -1,10 +1,10 @@
 {
-    "name": "api-test-wrapper",
+    "name": "continuous-testing-wrapper-for-nodejs",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "index.ts",
     "scripts": {
-        "start": "node src/index.js process_yaml"
+        "start": "ts-node src/index.ts process_yaml"
     },
     "author": "Genki Kondo",
     "license": "MIT",
@@ -19,6 +19,8 @@
         "newman-reporter-htmlextra": "^1.22.11",
         "node-rest-client": "^3.1.1",
         "oracledb": "^6.0.0",
-        "pg": "^8.11.0"
+        "pg": "^8.11.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.1.3"
     }
 }
