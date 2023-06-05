@@ -12,7 +12,7 @@ class SendRequest extends Process {
 
   private async _exec(request_json, out_path) {
     const connect = await APIConnect.connect(api_env());
-    await connect.send_request(path.resolve(base_dir(), request_json));
+    await connect.send_request(path.resolve(base_dir(), request_json),path.resolve(base_dir(), out_path ?? ""));
     return RESULT_CODE_OK;
   }
 }

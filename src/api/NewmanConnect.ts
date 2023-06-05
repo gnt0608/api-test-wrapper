@@ -15,8 +15,8 @@ class NewmanConnect extends APIConnect {
           collection: require(request_json),
           reporters: ["json", "htmlextra"],
           reporter: {
-            json: { export: path.resolve(out_path, "api_result.json") },
-            htmlextra: { export: path.resolve(out_path, "api_result.html") },
+            json: { export: path.resolve(out_path ?? '', "api_result.json") },
+            htmlextra: { export: path.resolve(out_path ?? '', "api_result.html") },
           },
         },
         function (err, summary) {

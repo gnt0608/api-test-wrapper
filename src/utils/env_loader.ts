@@ -67,7 +67,7 @@ function aws_env() {
 
 function api_env() {
   return {
-    api_type: variables.api_type,
+    api_type: variables.api.type,
   };
 }
 

@@ -6,6 +6,7 @@ import { stringify } from "csv-stringify/sync";
 import { db_env, base_dir } from "utils/env_loader";
 import * as path from "path";
 import { Process } from "./Process";
+import { export_csv } from "utils/helper";
 class Dump extends Process {
   constructor() {
     super();
@@ -22,9 +23,9 @@ class Dump extends Process {
       let table_list = tables instanceof Array ? tables : tables.split(",");
       for (const table of table_list) {
         let result = await connector.executeSelect(table);
-        fs.writeFileSync(
+        export_csv(
           path.resolve(base_dir(), out_path ? out_path : "", table + ".csv"),
-          stringify(result.rows, { header: true })
+          result.rows
         );
       }
     } finally {

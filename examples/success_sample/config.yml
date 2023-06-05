@@ -1,16 +1,20 @@
 send_request:
+  process: send_request
   args:
     request_json: ./request/MyCollection.postman_collection.json
+    out_path: output/request
 
 dump:
+  process: dump
   args:
     tables:
       - functions
       - roles
-    out_path: ./output/
+    out_path: ./output/dump/
 
 match_csv:
+  process: match_csv
   args:
     expect_path: expect/
-    actual_path: output/
-    out_path: match_result/
+    actual_path: output/dump
+    out_path: output/match_result

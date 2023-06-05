@@ -35,10 +35,7 @@ class MatchCSV extends Process {
 
         const expect_data = path.resolve(base_dir(), expect_path, in_file);
         const actual_data = path.resolve(base_dir(), actual_path, in_file);
-        var stats_out = fs.statSync(path.resolve(base_dir(), out_path));
-        const out = stats_out.isDirectory()
-          ? path.resolve(base_dir(), out_path, tablename + ".txt")
-          : path.resolve(base_dir(), out_path);
+        const out = path.resolve(base_dir(), out_path, tablename + ".txt");
         const tmp_result = this._match(
           expect_data,
           actual_data,
@@ -50,11 +47,7 @@ class MatchCSV extends Process {
     } else {
       const expect_data = path.resolve(base_dir(), expect_path);
       const actual_data = path.resolve(base_dir(), actual_path);
-      let tablename = path.basename(expect_data, ".csv");
-      var stats_out = fs.statSync(path.resolve(base_dir(), out_path));
-      const out = stats_out.isDirectory()
-        ? path.resolve(base_dir(), out_path, tablename + ".txt")
-        : path.resolve(base_dir(), out_path);
+      const out = path.resolve(base_dir(), out_path);
       match_result = this._match(expect_data, actual_data, out, check_type);
     }
     return match_result;

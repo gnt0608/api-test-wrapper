@@ -1,5 +1,7 @@
 import winston from "winston";
+import { format } from 'winston';
 
+const { combine, timestamp, prettyPrint, colorize, errors,  } = format;
 class Logger {
   private logger: winston.Logger;
 
@@ -8,6 +10,12 @@ class Logger {
       this.logger = winston.createLogger({
         level: process.env.LOG_LEVEL ?? "info",
         transports: [new winston.transports.Console()],
+        format: combine(
+          errors({ stack: true }), // <-- use errors format
+          colorize(),
+          timestamp(),
+          prettyPrint()
+        )
       });
   }
 
