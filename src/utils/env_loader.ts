@@ -24,7 +24,7 @@ function set_variable(key, value) {
 }
 
 function set_variables(values) {
-  for (let key of values) {
+  for (let key of Object.keys(values)) {
     set_variable(key, values[key]);
   }
 }
