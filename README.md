@@ -1,7 +1,8 @@
 # Continuous Testing wRapper for NodeJS
 
-{: align="center"}
-![代替テキスト](./ctrn.png)
+<div style="text-align: center;">
+<img src='./ctrn.png' />
+</div>
 
 ## 概要
 
