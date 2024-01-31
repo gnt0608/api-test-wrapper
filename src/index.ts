@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { ProcessModel } from "model/ProcessModel";
 import { class_loader, load_yaml_file } from "utils/helper";
 import { RESULT_CODE_OK, RESULT_CODE_NG } from "utils/constant";
@@ -5,8 +6,7 @@ import { setup, set_scenario_dir, set_variable } from "utils/env_loader";
 import { Logger } from "utils/Logger";
 var logger = new Logger();
 
-let clsf = process.argv[2];
-main(process.argv[3])
+main(process.argv[2])
   .then(() => {
     logger.info("end");
   })

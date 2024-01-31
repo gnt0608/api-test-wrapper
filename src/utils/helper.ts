@@ -10,7 +10,7 @@ function _make_dir(path) {
   }
 }
 async function class_loader(class_path) {
-  let module = await import(class_path);
+  let module = await import("../" + class_path);
   const clazz = module[Object.keys(module)[0]];
   return clazz;
 }

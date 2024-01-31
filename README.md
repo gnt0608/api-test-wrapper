@@ -21,7 +21,7 @@
 
 ```
 npm install ctrn
-npm run ctrn [config.yml]
+npx ctrn [config.yml]
 ```
 
 ### 必要ファイル
